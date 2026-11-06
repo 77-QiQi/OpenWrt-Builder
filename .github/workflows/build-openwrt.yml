@@ -9,8 +9,8 @@ on:
   workflow_dispatch:
 
 env:
-  REPO_URL: https://github.com/77-QiQi/lede
-  REPO_BRANCH: master
+  REPO_URL: ${{ vars.REPO_URL }}
+  REPO_BRANCH: ${{ vars.REPO_BRANCH }}
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: .config
   DIY_P1_SH: diy-part1.sh
@@ -22,7 +22,7 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-${{ vars.UBUNTU_VERSION }}
 
     steps:
     - name: Checkout
