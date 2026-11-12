@@ -956,7 +956,7 @@ index 0000000..6ff3750
 ++ * return 0: erase OK
 ++ * return -EIO: fail
 ++ */
-++int nfc_erase_block(struct ra_nand_chip *ra, int row_addr)
+++static int nfc_erase_block(struct ra_nand_chip *ra, int row_addr)
 ++{
 ++	unsigned long cmd1, cmd2, bus_addr, conf;
 ++	char status;
@@ -1056,7 +1056,7 @@ index 0000000..6ff3750
 ++ * @return !0: fail
 ++ * @return 0: OK
 ++ */
-++int nfc_read_oob(struct ra_nand_chip *ra, int page, unsigned int offs, char *buf, int len, int flags)
+++static int nfc_read_oob(struct ra_nand_chip *ra, int page, unsigned int offs, char *buf, int len, int flags)
 ++{
 ++	unsigned int cmd1 = 0, cmd2 = 0, conf = 0;
 ++	unsigned int bus_addr = 0, bus_addr2 = 0;
@@ -1110,7 +1110,7 @@ index 0000000..6ff3750
 ++ * @return !0: fail
 ++ * @return 0: OK
 ++ */
-++int nfc_write_oob(struct ra_nand_chip *ra, int page, unsigned int offs, char *buf, int len, int flags)
+++static int nfc_write_oob(struct ra_nand_chip *ra, int page, unsigned int offs, char *buf, int len, int flags)
 ++{
 ++	unsigned int cmd1 = 0, cmd3=0, conf = 0;
 ++	unsigned int bus_addr = 0, bus_addr2 = 0;
@@ -1162,7 +1162,7 @@ index 0000000..6ff3750
 ++
 ++#if !defined (WORKAROUND_RX_BUF_OV)
 ++static int one_bit_correction(char *ecc, char *expected, int *bytes, int *bits);
-++int nfc_ecc_verify(struct ra_nand_chip *ra, char *buf, int page, int mode)
+++static int nfc_ecc_verify(struct ra_nand_chip *ra, char *buf, int page, int mode)
 ++{
 ++	int ret, i;
 ++	char *p, *e;
@@ -1375,7 +1375,7 @@ index 0000000..6ff3750
 ++ * @return NAND_STATUS_FAIL, ecc fail.
 ++ */
 ++
-++int nfc_ecc_verify(struct ra_nand_chip *ra, char *buf, int page, int mode)
+++static int nfc_ecc_verify(struct ra_nand_chip *ra, char *buf, int page, int mode)
 ++{
 ++	int ret, i;
 ++	char *p, *e;
@@ -1650,7 +1650,7 @@ index 0000000..6ff3750
 ++ * nand internal process
 ++ *************************************************************/
 ++
-++int ra_nand_bbt_get(struct ra_nand_chip *ra, int block)
+++static int ra_nand_bbt_get(struct ra_nand_chip *ra, int block)
 ++{
 ++	int byte, bits;
 ++	bits = block * BBTTAG_BITS;
@@ -1661,7 +1661,7 @@ index 0000000..6ff3750
 ++	return (ra->bbt[byte] >> bits) & BBTTAG_BITS_MASK;
 ++}
 ++
-++int ra_nand_bbt_set(struct ra_nand_chip *ra, int block, int tag)
+++static int ra_nand_bbt_set(struct ra_nand_chip *ra, int block, int tag)
 ++{
 ++	int byte, bits;
 ++	bits = block * BBTTAG_BITS;
@@ -1688,7 +1688,7 @@ index 0000000..6ff3750
 ++ * Check, if the block is bad. Either by reading the bad block table or
 ++ * calling of the scan function.
 ++ */
-++int nand_block_checkbad(struct ra_nand_chip *ra, loff_t offs)
+++static int nand_block_checkbad(struct ra_nand_chip *ra, loff_t offs)
 ++{
 ++	int page, block;
 ++	int ret = 4;
@@ -1730,7 +1730,7 @@ index 0000000..6ff3750
 ++/**
 ++ * nand_block_markbad -
 ++ */
-++int nand_block_markbad(struct ra_nand_chip *ra, loff_t offs)
+++static int nand_block_markbad(struct ra_nand_chip *ra, loff_t offs)
 ++{
 ++	int page, block;
 ++	int ret = 4;
@@ -2302,7 +2302,7 @@ index 0000000..6ff3750
 ++	return ret;
 ++}
 ++
-++static int
+++static int __maybe_unused
 ++ramtd_nand_readoob(struct mtd_info *mtd, loff_t from,
 ++                   struct mtd_oob_ops *ops)
 ++{
@@ -2320,7 +2320,7 @@ index 0000000..6ff3750
 ++	return ret;
 ++}
 ++
-++static int
+++static int __maybe_unused
 ++ramtd_nand_writeoob(struct mtd_info *mtd, loff_t to,
 ++                    struct mtd_oob_ops *ops)
 ++{
